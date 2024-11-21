@@ -3,7 +3,7 @@ class NurikabeSolver():
         self.board = [[-1 for _ in range(self.size)] for _ in range(self.size)]
         self.size_row = len(board)
         self.size_col = len(board[0])
-        self.islands = {((row, col), board[row][col]) for row in range(self.size_row) for col in range(self.size_col) if board[row][col] != 0}
+        self.islands = {((row, col), board[row][col]): [(row, col)] for row in range(self.size_row) for col in range(self.size_col) if board[row][col] != 0}
         self.solution = None
 
     def check_solution(self, board, completed=True):
@@ -17,6 +17,9 @@ class NurikabeSolver():
                 for j in range(self.size_col):
                     if board[i][j] == -1:
                         return False
+            for island in self.islands:
+                if len(self.islands[island]) != island[1]:
+                    return False
         return check
 
     def check_2x2(self, board):
