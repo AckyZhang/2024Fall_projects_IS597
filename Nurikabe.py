@@ -60,11 +60,11 @@ class NurikabeSolver():
             self.board[row][col] = -1  # Reset cell
 
         return False
-    
+
     def solve(self):
         if self.trackback(0, 0):
             self.solution = self.board
             return True
         return False
-    
-    
+
+
