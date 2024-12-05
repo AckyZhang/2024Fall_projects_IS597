@@ -145,8 +145,18 @@ class NurikabeSolver():
                 self.trackback(row, col + 1)
             self.board[row][col] = -1  # Reset cell
 
+    def prefill(self):
+        for (r, c), size in self.clues.items():
+            if size == 1:
+                for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    new_r = r + dr
+                    new_c = (c + dc) % self.size_col
+                    if 0 <= new_r < self.size_row and 0 <= new_c < self.size_col and self.board[new_r][new_c] == -1:
+                        self.board[new_r][new_c] = 0
+
     def solve(self):
         self.solution = []
+        self.prefill()
         self.trackback(0, 0)
         if len(self.solution) != 0:
             return True
