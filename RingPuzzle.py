@@ -6,8 +6,6 @@ class NurikabeSolver():
         self.board = board
         self.size_row = len(board)
         self.size_col = len(board[0])
-        self.islands = {((row, col), board[row][col]): [(row, col)] for row in range(
-            self.size_row) for col in range(self.size_col) if board[row][col] != 0}
         self.clues = {}
         self.solution = []
         for r in range(self.size_row):
@@ -68,8 +66,7 @@ class NurikabeSolver():
                     return False
         return True
 
-    def dfs(self, row, col, target, visited, state):
-        state[row][col] = 1
+    def dfs(self, row, col, target, visited):
         if (row, col) in visited:
             return 0
         if not (0 <= row < self.size_row):
@@ -83,19 +80,17 @@ class NurikabeSolver():
             new_row = row + dr
             new_col = (col + dc) % self.size_col
             if (0 <= new_row < self.size_row):
-                if state[new_row][new_col] == 0:
-                    size += self.dfs(new_row, new_col, target, visited, state)
+                size += self.dfs(new_row, new_col, target, visited)
         return size
 
     def check_island_size(self, row, col):
         visited = set()
-        state = [[0 for _ in range(self.size_col)] for _ in range(self.size_row)]
-        return self.dfs(row, col, 1, visited, state)
+
+        return self.dfs(row, col, 1, visited)
 
     def check_ocean_continuous(self):
         visited = set()
         start = None
-        state = [[0 for _ in range(self.size_col)] for _ in range(self.size_row)]
         for r in range(self.size_row):
             for c in range(self.size_col):
                 if self.board[r][c] == 0:
@@ -106,7 +101,7 @@ class NurikabeSolver():
         if not start:
             return False
 
-        self.dfs(start[0], start[1], 0, visited, state)
+        self.dfs(start[0], start[1], 0, visited)
 
         for r in range(self.size_row):
             for c in range(self.size_col):
@@ -160,14 +155,12 @@ class NurikabeSolver():
                 continue
 
             # check if puzzle has one solution
-            state = [[0 for _ in range(col)] for _ in range(row)]
             for r in range(row):
                 for c in range(col):
-                    if solution[r][c] == 1 and state[r][c] == 0:
+                    if solution[r][c] == 1:
                         visited = set()
-                        island_size = self.dfs(r, c, 1, visited, state)
+                        island_size = self.dfs(r, c, 1, visited)
                         self.clues[(r, c)] = island_size
-                        # self.clues[random.choice(list(visited))] = island_size
                         continue
             for r in range(row):
                 for c in range(col):
@@ -187,24 +180,24 @@ class NurikabeSolver():
 
 
 # Example puzzle input
-# puzzle = [
-#     [3, -1, -1, -1],
-#     [-1, -1, 1, -1],
-#     [-1, -1, -1, -1],
-#     [-1, -1, -1, 2],
-# ]
 puzzle = [
-    [-1, -1, 1],
-    [1, -1, -1],
-    [-1, 1, -1],
+    [3, -1, -1, -1],
+    [-1, -1, 1, -1],
+    [-1, -1, -1, -1],
+    [-1, -1, -1, 2],
 ]
+# puzzle = [
+#     [-1, -1, 1],
+#     [1, -1, -1],
+#     [-1, 1, -1],
+# ]
 
 # Solve the Nurikabe puzzle
 solver = NurikabeSolver(puzzle)
 
-puzzle_new = solver.generate_puzzle(3, 3)
-for row in puzzle_new:
-    print(row)
+# puzzle_new = solver.generate_puzzle(3, 3)
+# for row in puzzle_new:
+#     print(row)
 
 
 if solver.solve():
