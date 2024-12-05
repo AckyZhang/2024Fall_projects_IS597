@@ -48,7 +48,7 @@ class NurikabeSolver():
     def check_2x2(self, board, cell=None):
         if cell:
             for i in [cell[0], (cell[0] - 1)]:
-                if i < 0:
+                if i < 0 or i >= (self.size_row - 1):
                     continue
                 for j in [cell[1], (cell[1] - 1) % self.size_col]:
                     if board[i][j] == board[i + 1][j] == 0:
@@ -151,7 +151,7 @@ class NurikabeSolver():
                 for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
                     new_r = r + dr
                     new_c = (c + dc) % self.size_col
-                    if 0 <= new_r < self.size_row and 0 <= new_c < self.size_col and self.board[new_r][new_c] == -1:
+                    if 0 <= new_r < self.size_row and self.board[new_r][new_c] == -1:
                         self.board[new_r][new_c] = 0
 
     def solve(self):
@@ -172,6 +172,8 @@ class NurikabeSolver():
         total_trial = 0
         while True:
             total_trial += 1
+            if total_trial % 50 == 0:
+                print("Total_trail reached", total_trial)
             solution = [[1 for _ in range(col)] for _ in range(row)]
             self.board = solution
             self.size_row = row
