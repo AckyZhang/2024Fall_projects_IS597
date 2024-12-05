@@ -2,17 +2,26 @@ import random
 
 
 class NurikabeSolver():
-    def __init__(self, board):
-        self.board = board
-        self.size_row = len(board)
-        self.size_col = len(board[0])
+    def __init__(self, board=None, size=None):
         self.clues = {}
         self.solution = []
-        for r in range(self.size_row):
-            for c in range(self.size_col):
-                if self.board[r][c] != -1:
-                    self.clues[(r, c)] = self.board[r][c]
-                    self.board[r][c] = 1
+        if board:
+            self.board = board
+            self.size_row = len(board)
+            self.size_col = len(board[0])
+            for r in range(self.size_row):
+                for c in range(self.size_col):
+                    if self.board[r][c] != -1:
+                        self.clues[(r, c)] = self.board[r][c]
+                        self.board[r][c] = 1
+        elif size:
+            self.size_row, self.size_col = size
+            puzzle = self.generate_puzzle(self.size_row, self.size_col)
+            print("Generated puzzle:")
+            for row in puzzle:
+                print(row)
+        else:
+            raise ValueError("Either board or size must be provided")
 
     def check_solution(self, completed=True):
         if completed:
@@ -142,25 +151,56 @@ class NurikabeSolver():
                 print("".join(['#' if x == 1 else '.' if x == 0 else '-' for x in row]))
 
     def generate_puzzle(self, row, col):
+        total_trial = 0
         while True:
-            solution = [[random.choice([0, 1]) for _ in range(col)] for _ in range(row)]
+            total_trial += 1
+            solution = [[1 for _ in range(col)] for _ in range(row)]
             self.board = solution
             self.size_row = row
             self.size_col = col
             self.clues = {}
             self.solution = []
-            if not self.check_ocean_continuous():
-                continue
-            if not self.check_2x2(solution):
-                continue
+            # randomize ocean start point
+            start_r = random.randint(0, row - 1)
+            start_c = random.randint(0, col - 1)
+            solution[start_r][start_c] = 0
+
+            ocean_size = random.randint(max(1, row * col // 4), (3 * row * col // 4))
+            current_ocean_size = 1
+            ocean = [(start_r, start_c)]
+            ocean_freedom = [4]
+
+            directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            while current_ocean_size < ocean_size and sum(ocean_freedom) > 0:
+                random.shuffle(directions)
+                start_r, start_c = random.choices(ocean, weights=ocean_freedom)[0]
+                res_ind = ocean.index((start_r, start_c))
+                for dr, dc in directions:
+                    new_r = start_r + dr
+                    new_c = (start_c + dc) % col
+                    if 0 <= new_r < row and solution[new_r][new_c] == 1:
+                        solution[new_r][new_c] = 0
+                        if self.check_2x2(solution):
+                            ocean.append((new_r, new_c))
+                            ocean_freedom.append(3)
+                            current_ocean_size += 1
+                            ocean_freedom[res_ind] -= 1
+                            break
+                        else:
+                            ocean_freedom[res_ind] -= 1
+                            solution[new_r][new_c] = 1
+                    else:
+                        ocean_freedom[res_ind] -= 1
 
             # check if puzzle has one solution
+            island_visited = set()
             for r in range(row):
                 for c in range(col):
-                    if solution[r][c] == 1:
+                    if solution[r][c] == 1 and (r, c) not in island_visited:
                         visited = set()
                         island_size = self.dfs(r, c, 1, visited)
-                        self.clues[(r, c)] = island_size
+                        island_visited.update(visited)
+                        self.clues[random.choice(list(visited))] = island_size
                         continue
             for r in range(row):
                 for c in range(col):
@@ -170,9 +210,12 @@ class NurikabeSolver():
                         self.board[r][c] = -1
 
             self.solve()
-            if len(self.solution) != 1:
+            if len(self.solution) > 1:
+                continue
+            elif len(self.solution) == 0:
                 continue
             else:
+                print("Total_trail", total_trial)
                 puzzle = [[-1 for _ in range(col)] for _ in range(row)]
                 for (r, c), size in self.clues.items():
                     puzzle[r][c] = size
@@ -180,24 +223,26 @@ class NurikabeSolver():
 
 
 # Example puzzle input
-puzzle = [
-    [3, -1, -1, -1],
-    [-1, -1, 1, -1],
-    [-1, -1, -1, -1],
-    [-1, -1, -1, 2],
-]
+# puzzle = [
+#     [3, -1, -1, -1],
+#     [-1, -1, 1, -1],
+#     [-1, -1, -1, -1],
+#     [-1, -1, -1, 2],
+# ]
 # puzzle = [
 #     [-1, -1, 1],
 #     [1, -1, -1],
 #     [-1, 1, -1],
 # ]
-
+puzzle = [
+    [3, -1, -1],
+    [-1, -1, -1],
+    [-1, -1, 3],
+]
 # Solve the Nurikabe puzzle
-solver = NurikabeSolver(puzzle)
+# solver = NurikabeSolver(board=puzzle)
 
-# puzzle_new = solver.generate_puzzle(3, 3)
-# for row in puzzle_new:
-#     print(row)
+solver = NurikabeSolver(size=(5, 5))
 
 
 if solver.solve():
