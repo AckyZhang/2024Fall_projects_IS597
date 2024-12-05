@@ -172,7 +172,7 @@ class NurikabeSolver():
         total_trial = 0
         while True:
             total_trial += 1
-            if total_trial % 50 == 0:
+            if total_trial % 1 == 0:
                 print("Total_trail reached", total_trial)
             solution = [[1 for _ in range(col)] for _ in range(row)]
             self.board = solution
@@ -231,8 +231,10 @@ class NurikabeSolver():
 
             self.solve()
             if len(self.solution) > 1:
+                print("Multiple solution")
                 continue
             elif len(self.solution) == 0:
+                print("No solution")
                 continue
             else:
                 print("Total_trail", total_trial)
