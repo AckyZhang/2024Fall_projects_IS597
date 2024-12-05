@@ -40,7 +40,7 @@ class NurikabeSolver():
 
     def check_2x2(self, board):
         for i in range(self.size_row - 1):
-            for j in range(self.size_col - 1):
+            for j in range(self.size_col):
                 if board[i][j] == board[i + 1][j] == 0:
                     if board[i][(j + 1) % self.size_col] == board[i + 1][(j + 1) % self.size_col] == 0:
                         return False
