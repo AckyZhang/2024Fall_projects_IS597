@@ -23,7 +23,7 @@ class NurikabeSolver():
         else:
             raise ValueError("Either board or size must be provided")
 
-    def check_solution(self, completed=True):
+    def check_solution(self, completed=True, last_cell=None):
         if completed:
             if not self.check_complete():
                 return False
@@ -41,11 +41,20 @@ class NurikabeSolver():
             for (r, c), size in self.clues.items():
                 if self.check_island_size(r, c) > size:
                     return False
-            if not self.check_2x2(self.board):
+            if not self.check_2x2(self.board, last_cell):
                 return False
             return True
 
-    def check_2x2(self, board):
+    def check_2x2(self, board, cell=None):
+        if cell:
+            for i in [cell[0], (cell[0] - 1)]:
+                if i < 0:
+                    continue
+                for j in [cell[1], (cell[1] - 1) % self.size_col]:
+                    if board[i][j] == board[i + 1][j] == 0:
+                        if board[i][(j + 1) % self.size_col] == board[i + 1][(j + 1) % self.size_col] == 0:
+                            return False
+            return True
         for i in range(self.size_row - 1):
             for j in range(self.size_col):
                 if board[i][j] == board[i + 1][j] == 0:
@@ -94,7 +103,6 @@ class NurikabeSolver():
 
     def check_island_size(self, row, col):
         visited = set()
-
         return self.dfs(row, col, 1, visited)
 
     def check_ocean_continuous(self):
@@ -133,7 +141,7 @@ class NurikabeSolver():
 
         for value in [0, 1]:
             self.board[row][col] = value
-            if self.check_solution(completed=False):
+            if self.check_solution(completed=False, last_cell=(row, col)):
                 self.trackback(row, col + 1)
             self.board[row][col] = -1  # Reset cell
 
