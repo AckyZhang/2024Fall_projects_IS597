@@ -255,14 +255,14 @@ class NurikabeSolver():
 #     [-1, -1, -1, -1],
 #     [-1, -1, -1, 2],
 # ]
-puzzle = [
-    [-1, 2, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1, 4],
-    [-1, -1, -1, 3, -1, -1],
-    [-1, -1, -1, -1, 1, -1],
-    [-1, -1, 2, -1, -1, 5],
-    [-1, -1, -1, -1, -1, -1],
-]
+# puzzle = [
+#     [-1, 2, -1, -1, -1, -1],
+#     [-1, -1, -1, -1, -1, 4],
+#     [-1, -1, -1, 3, -1, -1],
+#     [-1, -1, -1, -1, 1, -1],
+#     [-1, -1, 2, -1, -1, 5],
+#     [-1, -1, -1, -1, -1, -1],
+# ]
 # puzzle = [
 #     [3, -1, -1],
 #     [-1, -1, -1],
@@ -276,9 +276,9 @@ puzzle = [
 
 
 # Solve the Nurikabe puzzle
-solver = NurikabeSolver(board=puzzle)
+# solver = NurikabeSolver(board=puzzle)
 
-# solver = NurikabeSolver(size=(6, 6))
+solver = NurikabeSolver(size=(6, 4))
 
 
 if solver.solve():
