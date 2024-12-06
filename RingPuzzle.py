@@ -126,7 +126,7 @@ class NurikabeSolver():
                     return False
         return True
 
-    def trackback(self, row, col):
+    def trackforward(self, row, col):
         if col == self.size_col:
             row += 1
             col = 0
@@ -137,14 +137,16 @@ class NurikabeSolver():
             return False
 
         if self.board[row][col] != -1:
-            return self.trackback(row, col + 1)
+            return self.trackforward(row, col + 1)
 
         for value in [0, 1]:
             if len(self.solution) > 1:
                 return False
             self.board[row][col] = value
             if self.check_solution(completed=False, last_cell=(row, col)):
-                self.trackback(row, col + 1)
+                self.trackforward(row, col + 1)
+                if len(self.solution) > 1:
+                    return True
             self.board[row][col] = -1  # Reset cell
 
     def prefill(self):
@@ -159,7 +161,7 @@ class NurikabeSolver():
     def solve(self):
         self.solution = []
         self.prefill()
-        self.trackback(0, 0)
+        self.trackforward(0, 0)
         if len(self.solution) != 0:
             return True
         return False
@@ -258,10 +260,15 @@ class NurikabeSolver():
 #     [1, -1, -1],
 #     [-1, 1, -1],
 # ]
+# puzzle = [
+#     [3, -1, -1],
+#     [-1, -1, -1],
+#     [-1, -1, 3],
+# ]
 puzzle = [
-    [3, -1, -1],
     [-1, -1, -1],
-    [-1, -1, 3],
+    [-1, 2, -1],
+    [-1, -1, -1],
 ]
 # Solve the Nurikabe puzzle
 # solver = NurikabeSolver(board=puzzle)
