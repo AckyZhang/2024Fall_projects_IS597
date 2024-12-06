@@ -141,7 +141,7 @@ class NurikabeSolver():
 
         for value in [0, 1]:
             if len(self.solution) > 1:
-                return False
+                return True
             self.board[row][col] = value
             if self.check_solution(completed=False, last_cell=(row, col)):
                 self.trackforward(row, col + 1)
@@ -189,7 +189,7 @@ class NurikabeSolver():
             start_c = random.randint(0, col - 1)
             solution[start_r][start_c] = 0
 
-            ocean_size = random.randint(max(1, row * col // 4), (3 * row * col // 4))
+            ocean_size = random.randint(max(1, row * col // 4), (3 * row * col // 5))
             current_ocean_size = 1
             ocean = [(start_r, start_c)]
             ocean_freedom = [4]
@@ -204,7 +204,7 @@ class NurikabeSolver():
                     new_c = (start_c + dc) % col
                     if 0 <= new_r < row and solution[new_r][new_c] == 1:
                         solution[new_r][new_c] = 0
-                        if self.check_2x2(solution):
+                        if self.check_2x2(solution, (new_r, new_c)):
                             ocean.append((new_r, new_c))
                             ocean_freedom.append(3)
                             current_ocean_size += 1
@@ -255,25 +255,30 @@ class NurikabeSolver():
 #     [-1, -1, -1, -1],
 #     [-1, -1, -1, 2],
 # ]
-# puzzle = [
-#     [-1, -1, 1],
-#     [1, -1, -1],
-#     [-1, 1, -1],
-# ]
+puzzle = [
+    [-1, 2, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, 4],
+    [-1, -1, -1, 3, -1, -1],
+    [-1, -1, -1, -1, 1, -1],
+    [-1, -1, 2, -1, -1, 5],
+    [-1, -1, -1, -1, -1, -1],
+]
 # puzzle = [
 #     [3, -1, -1],
 #     [-1, -1, -1],
 #     [-1, -1, 3],
 # ]
-puzzle = [
-    [-1, -1, -1],
-    [-1, 2, -1],
-    [-1, -1, -1],
-]
-# Solve the Nurikabe puzzle
-# solver = NurikabeSolver(board=puzzle)
+# puzzle = [
+#     [-1, -1, -1],
+#     [-1, 2, -1],
+#     [-1, -1, -1],
+# ]
 
-solver = NurikabeSolver(size=(6, 6))
+
+# Solve the Nurikabe puzzle
+solver = NurikabeSolver(board=puzzle)
+
+# solver = NurikabeSolver(size=(6, 6))
 
 
 if solver.solve():
