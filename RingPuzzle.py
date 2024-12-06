@@ -140,6 +140,8 @@ class NurikabeSolver():
             return self.trackback(row, col + 1)
 
         for value in [0, 1]:
+            if len(self.solution) > 1:
+                return False
             self.board[row][col] = value
             if self.check_solution(completed=False, last_cell=(row, col)):
                 self.trackback(row, col + 1)
@@ -264,7 +266,7 @@ puzzle = [
 # Solve the Nurikabe puzzle
 # solver = NurikabeSolver(board=puzzle)
 
-solver = NurikabeSolver(size=(5, 5))
+solver = NurikabeSolver(size=(6, 6))
 
 
 if solver.solve():
