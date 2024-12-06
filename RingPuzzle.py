@@ -143,9 +143,9 @@ class NurikabeSolver():
             self.board[row][col] = value
             if self.check_solution(completed=False, last_cell=(row, col)):
                 self.trackforward(row, col + 1)
-                return True
+                if len(self.solution) > 1:
+                    return True
             self.board[row][col] = -1  # Reset cell
-        return False
 
     def prefill(self):
         for (r, c), size in self.clues.items():
@@ -258,15 +258,20 @@ class NurikabeSolver():
 #     [1, -1, -1],
 #     [-1, 1, -1],
 # ]
+# puzzle = [
+#     [3, -1, -1],
+#     [-1, -1, -1],
+#     [-1, -1, 3],
+# ]
 puzzle = [
-    [3, -1, -1],
     [-1, -1, -1],
-    [-1, -1, 3],
+    [-1, 2, -1],
+    [-1, -1, -1],
 ]
 # Solve the Nurikabe puzzle
 # solver = NurikabeSolver(board=puzzle)
 
-solver = NurikabeSolver(size=(5, 5))
+solver = NurikabeSolver(board=puzzle)
 
 
 if solver.solve():
