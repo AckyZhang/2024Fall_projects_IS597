@@ -189,7 +189,7 @@ class NurikabeSolver():
             start_c = random.randint(0, col - 1)
             solution[start_r][start_c] = 0
 
-            ocean_size = random.randint(max(1, row * col // 4), (3 * row * col // 5))
+            ocean_size = random.randint(max(1, row * col // 3), (3 * row * col // 5))
             current_ocean_size = 1
             ocean = [(start_r, start_c)]
             ocean_freedom = [4]
@@ -278,7 +278,7 @@ class NurikabeSolver():
 # Solve the Nurikabe puzzle
 # solver = NurikabeSolver(board=puzzle)
 
-solver = NurikabeSolver(size=(6, 4))
+solver = NurikabeSolver(size=(6, 6))
 
 
 if solver.solve():

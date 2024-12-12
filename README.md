@@ -1,29 +1,64 @@
 # 2024 Fall Final Projects
 
-Each project from this semester is a public fork linked from this repository.  This is just one of the many assignments students worked on for the course, but this is the *only* one they are permitted to publish openly.
+## Project Overview
 
-## Final Project Expectations:
+This project presents an implementation of a puzzle-solving and generating algorithm based on variant of **Nurikabe**, a classic Japanese logic puzzle. The project generates random Nurikabe puzzles, verifies their validity, and provides solutions, adhering to strict rules ensuring a unique solution for each puzzle.
 
-You have considerable flexibility about specifics and you will publish your project openly (as a fork from here) to allow making it part of your portfolio if you choose.  You may work alone or in a team of two students. 
+This repository includes the following components:
 
-Regardless of topic, it must involve notable amounts of original work of your own, though it can of course use existing libraries or be inspired by or built upon some other published work(s). 
+1. **Puzzle Generator**: Creates puzzles based on customizable grid dimensions and randomization of ocean and island placements.
+2. **Solver**: Implements recursive backtracking to find and verify solutions, ensuring that each generated puzzle has exactly one valid solution.
+3. **Validation Tools**: Ensures that generated puzzles and solutions comply with Nurikabe rules (e.g., continuous oceans, valid island sizes, and no forbidden 2x2 grids).
+4. **Analysis**: Includes performance measurement and algorithmic complexity analysis.
 
-PLAGIARISM IS NOT ACCEPTABLE. From the first commit through all production of documentation and code, it must be crystal clear which, if any, parts of the project were based on or duplicated from any other source(s) all of which must be cited. Use of generative AI systems must be cited for the same reasons, typically by documenting prompts used.  This should be so specific that any evaluator can tell which lines of code are original work and which aren't. Same for all written narrative, documentation, images, significant algorithms, etc.
+## Features
 
-## Project Types you may choose:
+- **Random Puzzle Generation**: Puzzles are generated with customizable dimensions, ensuring unique solutions.
+- **Solver**: The backtracking algorithm finds all possible solutions or confirms the absence of a valid solution.
+- **Validation**: Multiple checks are performed during puzzle solving and generation, including:
+  - Ocean continuity.
+  - Island size constraints.
+  - Absence of forbidden 2x2 configurations.
+- **Prefill Optimization**: Reduces the search space by marking certain cells based on provided clues.
 
-(Making original _variations_ of puzzles and games isn't as difficult as it may seem -- we have already done this in class. _Though admittedly, making *good* game variations -- that are well-balanced, strategically interesting, with good replay value_ can take expertise or luck and play-testing with revisions.  Such balanced elegance is desirable but might not be achievable here, given the short time you have.)
+## Usage
 
-1. Devise your own new _original_ type of logic puzzle or an _original variation_ of existing puzzle type. Like with previous homework, your program should be able to randomly generate new puzzles of your type and automatically verify that all puzzles generated comply with the standard meta-rule that only one valid solution exists. It needs to output the _unsolved_ puzzles in a way that a human can print or view them conveniently to try solving them and to somehow output (to file?) or display the solution for each puzzle when requested, so as not to spoil the challenge. An interactive UI to "play" the puzzles interactively is very nice but *not* required. 
+### Generating a Puzzle
 
-2. OR develop an AI game player for an _original variation_ of some existing strategy game.  If you do this, it needs to be set up so it can either play computer-vs-computer and/or against human players with a reasonable text or graphical UI. 2B. If two teams want to independently develop AI players for the same type of game variant as each other (but using different algorithms, strategies, and/or data structures) so they can compete, that is okay.  A sub-variation is to enable this game type on our course game server, discuss with the instructor if this is of interest.
+You can generate a random puzzle by specifying the grid size, or use solver.solve to solve specific puzzles.
+
+## Algorithmic Analysis
+
+### Critical Functions and Complexity
+
+1. **Puzzle Solver**:
+   - **DFS Search**: O(n^2) per call for a grid of size n × n.
+   - **Backtracking**: Worst-case complexity is also O(n^2).
+
+2. **Puzzle Generator**:
+   - **Ocean Randomization**: O(k), where k is the target ocean size.
+   - **Validation**: O(n^2) for checking islands, oceans, and 2x2 configurations.
+   - **Whole generation**: O(∞).
+
+   See the output file and profiler for more detailed analysis.
+
+### Performance Measurement
+
+- **Solver Runtime**: Profiling shows a dependency on grid size and clue distribution.
+- **Puzzle Generator Runtime**: Performance heavily depends on achieving a valid single-solution puzzle.
+
+## Project Contributions
+
+### Team Contributions
+
+For projects involving two students, ensure to document contributions explicitly in the README:
+
+- **Yi Wu**: Implemented the solver and validation logic, made the slides for presentation.
+- **Jiajun Zhang**: Initialized the solver structure and basic data structural design, designed the puzzle generator and integrated performance measurement tools and this README file.
 
 
-## Deliverables and other Requirements:
+## Possible Enhancements
 
-* Have some fun!
-* In your own fork, please replace this README.md file's contents with a good introduction to your own project. 
-* Targeted Algorithm Analysis:  Regardless of which option you choose, you need to _describe the performance characteristics of some critical parts of your program and explain why you chose the data structures and core algorithm(s) you did_. Examples, if you chose Type #1, what's the Big-O, Big-Theta, or Big-Omega run-time complexity of your puzzle solver? Or the puzzle generator? If you're doing Type #2 and using minimax or negamax, what's the complexity of your _heuristic evaluation function_? ...and of the function that finds all legal moves from a game state? 
-* Performance Measurement: Supplement the analysis above with run-time measurements of multiple iterations of the game or puzzles as discussed in class. Sample results from a run-time profiler is a good idea at least as part of the measurements.
-* If your team has more than one student, see that everyone makes substantial git commits. In addition, your README documentation should include a summary of how you shared the work.
-* Live in-class presentation & demonstration of your work.
+- Improving algorithm efficiency for solving and generating puzzles.
+- Like using ture backtracking instead of nested functions.
+- Use better recording data structure instead of DFS searching for island after every moves.
