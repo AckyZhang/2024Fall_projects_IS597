@@ -56,7 +56,6 @@ For projects involving two students, ensure to document contributions explicitly
 - **Yi Wu**: Implemented the solver and validation logic, made the slides for presentation.
 - **Jiajun Zhang**: Initialized the solver structure and basic data structural design, designed the puzzle generator and integrated performance measurement tools and this README file.
 
-
 ## Possible Enhancements
 
 - Improving algorithm efficiency for solving and generating puzzles.
